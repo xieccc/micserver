@@ -1,0 +1,19 @@
+{
+  "author": "xiec",
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "Multiplexing in Nodejs, from Golang.Can quickly open a simple server based on the path",
+  "keywords": [
+    "multiplexing",
+    "server",
+    "micserver"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/xc135/micserver",
+  "main": "micserver.js",
+  "name": "micserver",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.1.4"
+}
