@@ -1,15 +1,15 @@
 # micserver.js
 
-#### It can bing souters to handlers and start a native nodejs service very quickly
+#### It can bing routers to handlers and start a native nodejs service very quickly
 ```
-const ms = require('micserver')
+const micserver = require('micserver')
 
+const ms = micserver('http')
 ms.Handle({
     path: '/',
     method: 'GET',
     func: (req, res) => {
-        res.write('Hello World\n')
-        res.write('You use micserver to create a server successfully')
+        res.write('Hello World')
         res.end()
     }
 })
@@ -21,7 +21,6 @@ Then you visit http://localhost:80 and you can receive the following message
 
 ```
 Hello World
-You use micserver to create a server successfully
 ```
 
 ## Installation
@@ -30,28 +29,16 @@ You use micserver to create a server successfully
 
 ## Examples
 
-### start server in http
+### start service in http
 ```
-const ms = require('micserver')
+const micserver = require('micserver')
 
+const ms = micserver('http')
 ms.Handle({
     path: '/',
     method: 'GET',
     func: (req, res) => {
-        res.write('Hello World\n')
-        res.write('type: http\n')
-        res.write('METHOD: GET\n')
-        res.end()
-    }
-})
-
-ms.Handle({
-    path: '/',
-    method: 'POST',
-    func: (req, res) => {
-        res.write('Hello World\n')
-        res.write('type: http\n')
-        res.write('METHOD: POST\n')
+        res.write('Hello World')
         res.end()
     }
 })
@@ -59,51 +46,84 @@ ms.Handle({
 ms.listen()
 ```
 
-### start server in https
+### Start an http service and https service at the same time
 ```
-const ms = require('micserver')
+const micserver = require('micserver')
 
-ms.set({
-    type = 'https'
-    keypath = {
+const ms1 = micserver('http')
+const ms2 = micserver('https')
+
+ms1.Handle({
+    path: '/',
+    method: 'GET',
+    func: (req, res) => {
+        res.write('Hello World')
+        res.end()
+    }
+})
+
+ms2.set({
+    port: 443,
+    keypath: {
         key: './key',
         cert: './cert'
     }
-    host = '127.0.0.1'
-    port = 8080
 })
 
-ms.Handle({
+ms2.Handle({
     path: '/',
     method: 'GET',
     func: (req, res) => {
-        res.write('Hello World\n')
-        res.write('type: https\n')
-        res.write('METHOD: GET\n')
+        res.write('Hello World')
         res.end()
     }
 })
 
-ms.listen()
+ms1.listen()
+ms2.listen()
 ```
+
+Then http server and https server will listen to ports 80 and 443 respectively.
 
 ## Api
 
-### micserver.set({options})
+### micserver(options)
+
+Only support http or https type, return http or https server
+
+### type: http
+#### .set({options})
 |Property|Description|Type|Default|
 |:-|:-|:-|:-|
-|type|If you enable the server's ssl, then the value is https<br>Optional values are `http` and `https`|String|"http"|
-|keypath|This field is required if the type is https.<br>Need to configure the path of the `key` and `cert`|Object|{key: '',cert: ''}|
 |host|The IP address of the service listener<br>for example `127.0.0.1` or `0.0.0.0`|String|"0.0.0.0"|
 |port|Service listening the port|Number|80|
 
-### micserver.Handle({options})
+#### .Handle({options})
 |Property|Description|Type|Default|
 |:-|:-|:-|:-|
 |method|Method of requesting service|String|'GET'|
 |path|Path of requesting service|String|'/'|
 |func|Service handler. This handler takes two parameters: <br>`request` and `response`.|Function||
 
-### micserver.listen()
+#### .listen()
+
+Start the service with the default or option configured in the set
+
+### type: https
+#### .set({options})
+|Property|Description|Type|Default|
+|:-|:-|:-|:-|
+|keypath|This field is required if the type is https.<br>Need to configure the path of the `key` and `cert`|Object|{key: '',cert: ''}|
+|host|The IP address of the service listener<br>for example `127.0.0.1` or `0.0.0.0`|String|"0.0.0.0"|
+|port|Service listening the port|Number|443|
+
+#### .Handle({options})
+|Property|Description|Type|Default|
+|:-|:-|:-|:-|
+|method|Method of requesting service|String|'GET'|
+|path|Path of requesting service|String|'/'|
+|func|Service handler. This handler takes two parameters: <br>`request` and `response`.|Function||
+
+#### .listen()
 
 Start the service with the default or option configured in the set
