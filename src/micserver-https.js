@@ -36,8 +36,8 @@ class micserverHttps {
     
     listen(){
         const options = {
-            key: fs.readFileSync(keypath.key),
-            cert: fs.readFileSync(keypath.cert)
+            key: fs.readFileSync(this.keypath.key),
+            cert: fs.readFileSync(this.keypath.cert)
         }
         https.createServer(options, (req, res) => this.entrance(req, res)).listen(this.port, this.host)
 
